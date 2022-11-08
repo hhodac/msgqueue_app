@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import time
 import argparse
 
 from tabulate import tabulate
@@ -8,6 +9,8 @@ import pandas as pd
 import paho.mqtt.client as mqtt
 
 from utils import load_env_config, load_system_config
+
+connection_status = False
 
 
 def parse_opt():
@@ -23,6 +26,14 @@ def parse_opt():
 
 
 def main(opt):
+    def on_connect(client, userdata, flags, rc):
+        """Callback when client connect to broker"""
+        global connection_status
+        if rc == 0:
+            connection_status = True
+        else:
+            print(" [ERROR] Connection refused")
+
     def on_message(client, userdata, message):
         msg = json.loads(message.payload.decode('utf-8'))
         print(" [x] From %s received %s" % (message.topic, msg))
@@ -56,10 +67,15 @@ def main(opt):
     # Client connect to broker
     client = mqtt.Client(client_name, True, protocol=mqtt.MQTTv311)
     client.username_pw_set(vhost + ":" + username, password)
+    client.on_connect = on_connect
     client.on_message = on_message
+    client.connect(host=host, port=port, keepalive=60)
+    client.loop_start()
+    while True:
+        if connection_status:
+            break
     print(" [INFO] App name: %s" % client_name)
     print(" [INFO] Connected to %s:%d" % (sys_cfg['host'], sys_cfg['port']))
-    client.connect(host=host, port=port, keepalive=60)
 
     # Subscribe to topic
     table_stat1 = []
@@ -69,7 +85,9 @@ def main(opt):
         client.subscribe(topic)
         print(" [INFO] `%s` subscribing to topic `%s`" % (client_name, topic))
 
-    client.loop_forever()
+    # client.loop_forever()
+    while True:
+        time.sleep(60)
 
 
 if __name__ == "__main__":

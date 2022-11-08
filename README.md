@@ -11,7 +11,7 @@ Environment setup:
 System overview:
 ![System overview](figures/system_overview.png)
 
-## Local setup
+## Broker local setup
 Initialise RabbitMQ server:
 ```
 # Starting server
@@ -34,10 +34,36 @@ MQTT-USERNAME = "mqtt-test"
 MQTT-PASSWORD = "mqtt-test"
 ```
 
-## Docker setup
+Configure host:
+* Modify `host` in `config.json` to **"localhost"**.
+
+## Broker cloud setup (AWS EC2 with docker)
+
+*Prerequisite*: Installation Docker on Linux (for AWS EC2) -> read [here](https://docs.docker.com/engine/install/ubuntu/)
+
 ```
 docker pull rabbitmq
+sudo docker run -d -p 1883:1883 rabbitmq:latest
+sudo docker container ps
+# grab container name
+sudo docker exec -it <container_name> sh
+
+# <!-- Inside container --!>
+rabbitmq-plugins enable rabbitmq_mqtt
+rabbitmqctl add_user mqtt-test mqtt-test
+rabbitmqctl set_permissions -p / mqtt-test ".*" ".*" ".*"
+rabbitmqctl set_user_tags mqtt-test management
+exit
+# <!-- End container --!>
 ```
+
+Configure host:
+* Modify host in config.json to
+**"3.106.129.172"** (AWS EC2 IP) <<< *CURRENT SETTINGS*
+
+Open port of AWS EC2:
+* Security group > Inbound rules > IPv4 > "All traffic" (all protocol, all port range, source=0.0.0.0/0) *(for demo only, not a good practice to open all the ports and inbound)*
+
 
 ## App1
 Generates a random number between [1 and 100] every [1 to 30] seconds and publishes to broker with topic named `app1/randint`.
@@ -67,13 +93,13 @@ python src/app3.py
 ![demo](figures/demo.gif)
 
 # Project timeline records
-* Self-study & research: 1 day
+* Self-study & research: 1.5 day
 * Implementation: 1 day
     * [x] Design: 30 minutes
     * [x] Coding: 2 hours
     * [x] Testing (local): 1 hour
-    * [ ] Deployment: 2 hour
-    * [ ] Testing (deploy): 1 hour
+    * [x] Deployment: 2 hour
+    * [x] Testing (deploy): 1 hour
     * [x] Documentation: 1 hour
 
 # References
@@ -85,3 +111,5 @@ python src/app3.py
     * [Installation and usage](https://pypi.org/project/paho-mqtt/)
     * [Documentations](https://www.eclipse.org/paho/index.php?page=clients/python/docs/index.php)
     * [Tutorials](http://www.steves-internet-guide.com/into-mqtt-python-client/)
+3. Install docker on Linux:
+    * [Installation guide](https://docs.docker.com/engine/install/ubuntu/)

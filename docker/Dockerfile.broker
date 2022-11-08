@@ -8,5 +8,5 @@ RUN rabbitmq-plugins enable --offline rabbitmq_mqtt
 EXPOSE 1883 11883
 
 
-CMD ["rabbitmq-server"]
+# CMD ["rabbitmq-server"]
 # RUN /init.sh

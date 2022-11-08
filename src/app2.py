@@ -7,7 +7,9 @@ from cache import Cache
 
 import paho.mqtt.client as mqtt
 
-from utils import load_env_config, load_system_config, on_connect
+from utils import load_env_config, load_system_config
+
+connection_status = False
 
 
 def parse_opt():
@@ -23,6 +25,14 @@ def parse_opt():
 
 
 def main(opt):
+    def on_connect(client, userdata, flags, rc):
+        """Callback when client connect to broker"""
+        global connection_status
+        if rc == 0:
+            connection_status = True
+        else:
+            print(" [ERROR] Connection refused")
+
     def on_message(client, userdata, message):
         msg = json.loads(message.payload.decode('utf-8'))
         client_topic_1m.update(msg)
@@ -51,13 +61,16 @@ def main(opt):
     client.username_pw_set(vhost + ":" + username, password)
     client.on_connect = on_connect
     client.on_message = on_message
+    client.connect(host=host, port=port, keepalive=60)
+    client.loop_start()
+    while True:
+        if connection_status:
+            break
     print(" [INFO] App name: %s" % client_name)
     print(" [INFO] Connected to %s:%d" % (sys_cfg['host'], sys_cfg['port']))
-    client.connect(host=host, port=port, keepalive=60)
 
     # Subscribe to topic
     client.subscribe(topic_subscribe)
-    client.loop_start()
     print(" [INFO] Subscribed to topic %s" % topic_subscribe)
 
     # Map client to topic publish
