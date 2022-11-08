@@ -32,5 +32,5 @@ jobs:
           ignore: "F401"
           # exclude: ""
           max-line-length: "79"
-          path: "."
+          path: "src/"
           plugins: "flake8-bugbear==22.1.11 flake8-black"
