@@ -1,11 +1,10 @@
 version: "1.0"
 services:
-    rabbitmq3:
+    broker:
         container_name: "rabbitmq-switchdin"
-        image: rabbitmq/switchdin:latest
         environment:
-            - RABBITMQ_DEFAULT_USER=myuser
-            - RABBITMQ_DEFAULT_PASS=mypassword
+            - RABBITMQ_DEFAULT_USER="mqtt-test"
+            - RABBITMQ_DEFAULT_PASS="mqtt-test"
         build: Dockerfile.broker
         ports:
             # AMQP protocol port
@@ -17,10 +16,13 @@ services:
 
 
     app1:
+        container_name: "app1"
         build: Dockerfile.app1
         
     app2:
+        container_name: "app2"
         build: Dockerfile.app2
     
     app3:
+        container_name: "app3"
         build: Dockerfile.app3
