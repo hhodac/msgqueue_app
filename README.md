@@ -70,7 +70,8 @@ Generates a random number between [1 and 100] every [1 to 30] seconds and publis
 
 Run app:
 ```
-python src/app1.py
+cd src
+python /app1.py
 ```
 ## App2
 Subscribes to topic `app1/randint` and compute average every [1, 5, 30] minutes,
@@ -78,7 +79,8 @@ and publishes accordingly to broker with topics named `app2/stat_1m`, `app2/stat
 
 Run app:
 ```
-python src/app2.py
+cd src
+python /app2.py
 ```
 
 ## App3
@@ -86,7 +88,8 @@ Subscribes to topics `app2/stat_1m`, `app2/stat_5m`, `app2/stat_30m`, and prints
 
 Run app:
 ```
-python src/app3.py
+cd src
+python app3.py
 ```
 
 # Demo
