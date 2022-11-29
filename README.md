@@ -1,6 +1,6 @@
-# Switchdin Challenge
+# Simple message queue application
 
-Topic: Python Software Engineer (Embedded, Data Science)
+Switchdin challenge for Python Software Engineer (Embedded, Data Science)
 
 # Application Description
 
@@ -58,8 +58,7 @@ exit
 ```
 
 Configure host:
-* Modify host in config.json to
-**"3.106.129.172"** (AWS EC2 IP) <<< *CURRENT SETTINGS*
+* Modify host in config.json to AWS EC2's public IP address.
 
 Open port of AWS EC2:
 * Security group > Inbound rules > IPv4 > "All traffic" (all protocol, all port range, source=0.0.0.0/0) *(for demo only, not a good practice to open all the ports and inbound)*
