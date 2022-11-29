@@ -1,5 +1,4 @@
 # Simple message queue application
-
 Switchdin challenge for Python Software Engineer (Embedded, Data Science)
 
 # Application Description
