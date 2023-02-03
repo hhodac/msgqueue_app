@@ -2,11 +2,11 @@ FROM rabbitmq:3.11.2-alpine
 
 RUN rabbitmq-plugins enable --offline rabbitmq_mqtt
 
-# ADD init.sh /init.sh
-# RUN chmod +x /init.sh
+COPY src/rabbitmq.conf /opt/rabbitmq/etc/rabbitmq
+
+ENV RABBITMQ_CONFIG_FILE=/opt/rabbitmq/etc/rabbitmq/rabbitmq.conf
 
 EXPOSE 1883 11883
 
 
-# CMD ["rabbitmq-server"]
-# RUN /init.sh
+CMD ["rabbitmq-server"]

@@ -53,8 +53,8 @@ def main(opt):
 
     topic_subscribe = "app1/randint"
     topic_publish1 = "app2/stat_1m"
-    topic_publish2 = "app2/stat_5m"
-    topic_publish3 = "app2/stat_30m"
+    topic_publish5 = "app2/stat_5m"
+    topic_publish30 = "app2/stat_30m"
 
     # Client connect to broker
     client = mqtt.Client(client_name, True, protocol=mqtt.MQTTv311)
@@ -75,8 +75,8 @@ def main(opt):
 
     # Map client to topic publish
     client_topic_1m = Cache(client, topic_publish1)
-    client_topic_5m = Cache(client, topic_publish2)
-    client_topic_30m = Cache(client, topic_publish3)
+    client_topic_5m = Cache(client, topic_publish5)
+    client_topic_30m = Cache(client, topic_publish30)
 
     cnt = 0
     while True:

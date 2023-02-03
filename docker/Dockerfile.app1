@@ -5,9 +5,20 @@ WORKDIR /usr/src/app
 COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
+# RUN apt update
+# RUN apt install -y net-tools
+# RUN apt-get update -y
+# RUN apt-get install -y iputils-ping
+# RUN apt-get install -y telnet
+# RUN apt-get install -y nano
 
 COPY src/ .
 
-EXPOSE 1883 11883
+# EXPOSE 1883 11883
+EXPOSE 1883
+
+ENV MQTT_USERNAME="mqtt-test"
+ENV MQTT_PASSWORD="mqtt-test"
+ENV HOST="172.18.0.2"
 
 CMD [ "python", "app1.py" ]

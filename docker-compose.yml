@@ -1,0 +1,60 @@
+version: "1.0"
+services:
+    broker:
+        container_name: "broker"
+        environment:
+            - RABBITMQ_DEFAULT_USER="mqtt-test"
+            - RABBITMQ_DEFAULT_PASS="mqtt-test"
+        build: ./Dockerfile.broker
+        ports:
+            # AMQP protocol port
+            - '5672:5672'
+            # HTTP management UI
+            - '15672:15672'
+            # MQTT plugin port
+            - '1883:1883'
+        networks:
+            my-internal-network:
+                ipv4_address: 172.18.0.2
+
+    app1:
+        container_name: "app1"
+        build: ./docker/Dockerfile.app1
+        ports:
+            - '1883'
+        depends_on:
+            - app2
+            - app3
+            - broker
+        networks:
+            my-internal-network:
+                ipv4_address: 172.18.0.3
+    app2:
+        container_name: "app2"
+        build: ./Dockerfile.app2
+        ports:
+            - '1883'
+        depends_on:
+            - broker
+        networks:
+            my-internal-network:
+                ipv4_address: 172.18.0.4
+    
+    app3:
+        container_name: "app3"
+        build: ./Dockerfile.app3
+        ports:
+            - '1883'
+        depends_on:
+            - broker
+        networks:
+            my-internal-network:
+                ipv4_address: 172.18.0.5
+
+networks:
+    my-internal-network:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.18.0.0/16
+                - gateway: 172.18.0.1

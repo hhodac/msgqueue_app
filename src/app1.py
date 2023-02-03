@@ -41,8 +41,12 @@ def main(opt):
     client_name = opt['name']
     username = os.environ['MQTT_USERNAME']
     password = os.environ['MQTT_PASSWORD']
+    # username = 'mqtt-test'
+    # password = 'mqtt-test'
     vhost = sys_cfg['vhost']
-    host = sys_cfg['host']
+    host = os.environ['HOST']
+    if host is None:
+        host = sys_cfg['host']
     port = sys_cfg['port']
 
     topic_publish = "app1/randint"

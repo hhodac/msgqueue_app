@@ -10,4 +10,8 @@ COPY src/ .
 
 EXPOSE 1883 11883
 
+ENV MQTT_USERNAME="mqtt-test"
+ENV MQTT_PASSWORD="mqtt-test"
+ENV HOST="172.18.0.2"
+
 CMD [ "python", "app2.py" ]
